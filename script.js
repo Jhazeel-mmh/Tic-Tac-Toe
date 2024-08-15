@@ -27,6 +27,20 @@ const Gameboard = (function (){
 
     return {
         setToken,
-        getBoard
+        getBoard,
+        printBoard
     }
 })();
+
+function Cell(){
+    let value = 0;
+
+    getValue = () => value;
+    setValue = (val) => value = val;
+
+    return {
+        getValue, setValue
+    }
+}
+
+Gameboard.printBoard(); 
