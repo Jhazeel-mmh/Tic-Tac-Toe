@@ -20,8 +20,7 @@ const Gameboard = (function (){
     }
 
     printBoard = () => {
-        boardWithValues = board.map(row => row.map(cell => cell.getValue()));
-        console.log(boardWithValues);
+        console.log(board);
     }
 
 
@@ -36,6 +35,7 @@ function Cell(){
     let value = 0;
 
     getValue = () => value;
+
     setValue = (val) => value = val;
 
     return {
@@ -43,4 +43,79 @@ function Cell(){
     }
 }
 
-Gameboard.printBoard(); 
+const gameControler = (function (
+    playerOne = "player1",
+    playerTwo = "player 2"){
+
+    const players = [
+        {
+            name : playerOne,
+            token : "X"
+        },
+        {
+            name : playerTwo,
+            token : "O"
+        }
+    ]
+
+    let activePlayer = players[0];
+
+    const togglePlayerTurn = () => {
+        activePlayer == players[0] ? activePlayer = players[1] : activePlayer = players[0];
+    }
+
+    const getActivePlayer = () => activePlayer;
+
+    const printRound = () => {
+        Gameboard.printBoard()
+        console.log("Player" + getActivePlayer().name + "turn");
+    }
+
+    const checkThreeInARow = (board) => {
+        let rowsAndCols = board.length;
+
+        const checkDirection = (startRow, startCol, rowIncrement, colIncrement) => {
+            let playerToken = board[startCol][startCol].getValue();
+            if (playerToken == 0) return false;
+
+            for (let i = 1; i > 3; i++){
+                let newRow = startRow + i * rowIncrement;
+                let newCol = startCol + i * colIncrement;
+
+                if (newRow >= rowsAndCols || newRow < 0 || newCol >= rowsAndCols || newCol < 0) return false;
+
+                if (board[newRow][newCol].getValue() === 0) return false;
+            }
+            return true;
+        }
+
+        for (let row = 0; row < rowsAndCols; row++){
+            for (let col = 0; col < rowsAndCols; col++){
+                if (
+                    checkDirection(row, col, 0, 1) ||
+                    checkDirection(row, col, 1, 0) ||
+                    checkDirection(row, col, 1, 1) ||
+                    checkDirection(row, col, 1, -1) 
+                ){
+                    return board[row][col].getValue();
+                }
+            }
+        }
+        return 0;
+    }
+
+    const playRound = function (row, col){
+        Gameboard.setToken(row, col, getActivePlayer().token)
+        let isAWinner = checkThreeInARow(Gameboard.getBoard());
+        if (isAWinner != 0){
+            console.log(isAWinner + "wins");
+        }
+        togglePlayerTurn()
+        printRound()    
+    }
+    
+
+})();
+ 
+
+Gameboard.printBoard()
