@@ -153,12 +153,31 @@ const gameControler = (function (
 })();
  
 const displayController = (function (){
-    let board = Gameboard.getBoard();
+    let gameGrid = document.querySelector(".game-grid");
+    let turnDiv = document.querySelector(".turn");
 
-    board.forEach(row => {
-        row.forEach(cell => {
-                  
-        })
-    });
+    const displayGrid = () => {
+        Gameboard.getBoard().forEach((row, indexRow) => {
+            row.forEach((cell, index) => {
+               let square = document.createElement("div");
+               square.classList.add(`grid-square`);
+               square.id = `${indexRow}-${index}`;  
 
+               if (cell.getValue() == 0){
+                gameGrid.appendChild(square);
+               } else {
+                square.textContent = cell.getValue();    
+                gameGrid.appendChild(square);
+               }        
+
+            })
+        });
+    }
+
+    
+    return {
+        displayGrid
+    }
 })(); 
+
+displayController.displayGrid();
