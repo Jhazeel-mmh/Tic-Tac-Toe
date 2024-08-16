@@ -11,7 +11,21 @@ const Gameboard = (function (){
 
     getBoard = () => board;
 
+    theBoardIsFull = () => {
+        board.forEach(row => {
+            row.forEach(
+                cell => {
+                    if (cell.getValue() === 0) return false;
+                };
+            );    
+        });
+        return true;
+
+    }
+
     setToken = (row, column, token) => {
+        if (row >= 3 || column >= 3) return;
+
         if (board[row][column].getValue() === 0){
             board[row][column].setValue(token);
         } else {
@@ -20,21 +34,25 @@ const Gameboard = (function (){
     }
 
     printBoard = () => {
-        console.log(board);
+        let boardNew = board.map(row => row.map(cell => cell.getValue()));
+        console.log(boardNew);
     }
 
 
     return {
         setToken,
         getBoard,
-        printBoard
+        printBoard,
+        theBoardIsFull
     }
 })();
 
 function Cell(){
     let value = 0;
 
-    getValue = () => value;
+    getValue = function(){
+        return value;
+    };
 
     setValue = (val) => value = val;
 
@@ -105,6 +123,7 @@ const gameControler = (function (
     }
 
     const playRound = function (row, col){
+        console.log(`Is ${getActivePlayer().name} turn..`)
         Gameboard.setToken(row, col, getActivePlayer().token)
         let isAWinner = checkThreeInARow(Gameboard.getBoard());
         if (isAWinner != 0){
@@ -114,8 +133,12 @@ const gameControler = (function (
         printRound()    
     }
     
+    printRound();
+
+    return {
+        playRound,
+        getActivePlayer,
+    }
 
 })();
  
-
-Gameboard.printBoard()
