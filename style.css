@@ -1,3 +1,65 @@
-* {
-    background-color: pink;
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5vh 5vw;
+}
+
+svg {
+    height: 30px;
+    width: 20px;
+    fill: black;
+}
+
+.game {
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template: 1fr 5fr 1fr / 1fr 3fr 1fr;
+    grid-template-areas: 
+    "title title title"
+    "left grid right"
+    "turn turn turn"
+    ;
+    gap: 15px;
+
+}
+
+.game-title {
+    grid-area: title;
+    text-align: center;
+}
+
+.player-left {
+    grid-area: left;
+}
+
+.player-right {
+    grid-area: right;
+}
+
+.game-grid {
+    grid-area: grid;
+    display: grid;
+    grid-template: repeat(3, minmax(50px, 1fr)) / repeat(3, minmax(50px, 1fr));
+}
+
+.turn {
+    grid-area: turn;
+}
+
+footer {
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    justify-content: space-around;
+}
+
+.footer__github > * {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

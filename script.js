@@ -152,3 +152,13 @@ const gameControler = (function (
 
 })();
  
+const displayController = (function (){
+    let board = Gameboard.getBoard();
+
+    board.forEach(row => {
+        row.forEach(cell => {
+                  
+        })
+    });
+
+})(); 
