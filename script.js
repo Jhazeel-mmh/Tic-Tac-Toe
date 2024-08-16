@@ -16,7 +16,7 @@ const Gameboard = (function (){
             row.forEach(
                 cell => {
                     if (cell.getValue() === 0) return false;
-                };
+                }
             );    
         });
         return true;
@@ -122,15 +122,25 @@ const gameControler = (function (
         return 0;
     }
 
+    const thereIsAWinner = () => {
+        let winnerToken = checkThreeInARow(Gameboard.getBoard());
+        if (winnerToken != 0){
+            players.forEach(player => {
+                if (player.token == winnerToken) return player.name;
+            });
+        }
+        return false;
+    };
+
     const playRound = function (row, col){
         console.log(`Is ${getActivePlayer().name} turn..`)
         Gameboard.setToken(row, col, getActivePlayer().token)
-        let isAWinner = checkThreeInARow(Gameboard.getBoard());
-        if (isAWinner != 0){
-            console.log(isAWinner + "wins");
+        if (thereIsAWinner()){
+            return true;
         }
         togglePlayerTurn()
         printRound()    
+        return false;
     }
     
     printRound();
