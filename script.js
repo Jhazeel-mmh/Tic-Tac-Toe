@@ -174,9 +174,22 @@ const displayController = (function (){
         });
     }
 
-    
+
+    const handleClick = (event) => {
+        let target = event.target;
+        if (target.className !== "square") return;
+
+        let [row, col] = target.id.split("-");
+
+        // verify if there is a winner
+        if (gameControler.playRound(row, col)){
+            displayWinner(true);
+        }
+        displayGame();
+    }
+
     return {
-        displayGrid
+        displayGrid, handleClick
     }
 })(); 
 
