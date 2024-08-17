@@ -93,16 +93,16 @@ const gameControler = (function (
         let rowsAndCols = board.length;
 
         const checkDirection = (startRow, startCol, rowIncrement, colIncrement) => {
-            let playerToken = board[startCol][startCol].getValue();
+            let playerToken = board[startRow][startCol].getValue();
             if (playerToken == 0) return false;
 
-            for (let i = 1; i > 3; i++){
+            for (let i = 1; i < 3; i++){
                 let newRow = startRow + i * rowIncrement;
                 let newCol = startCol + i * colIncrement;
 
                 if (newRow >= rowsAndCols || newRow < 0 || newCol >= rowsAndCols || newCol < 0) return false;
 
-                if (board[newRow][newCol].getValue() === 0) return false;
+                if (board[newRow][newCol].getValue() !== playerToken) return false;
             }
             return true;
         }
@@ -157,6 +157,7 @@ const displayController = (function (){
     let turnDiv = document.querySelector(".turn");
 
     const displayGrid = () => {
+        gameGrid.textContent = "";
         Gameboard.getBoard().forEach((row, indexRow) => {
             row.forEach((cell, index) => {
                let square = document.createElement("div");
@@ -172,12 +173,23 @@ const displayController = (function (){
 
             })
         });
-    }
+    };
+
+    const displayGame = () => {
+        turnDiv.textContent = `${gameControler.getActivePlayer().name} is your turn...`;
+        displayGrid();
+    };
+
+
+    // Display the winner name in the turn section and generate a button that resets the Gameboard (create that closure in the Gameboard IFFE) and displays the game
+    const displayWinner = () => {
+
+    };
 
 
     const handleClick = (event) => {
         let target = event.target;
-        if (target.className !== "square") return;
+        if (target.className !== "grid-square") return;
 
         let [row, col] = target.id.split("-");
 
@@ -189,8 +201,9 @@ const displayController = (function (){
     }
 
     return {
-        displayGrid, handleClick
+        displayGame, handleClick
     }
 })(); 
 
-displayController.displayGrid();
+displayController.displayGame();
+document.querySelector(".game-grid").addEventListener("click", displayController.handleClick );
