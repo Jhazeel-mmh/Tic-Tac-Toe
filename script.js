@@ -12,14 +12,17 @@ const Gameboard = (function (){
     getBoard = () => board;
 
     theBoardIsFull = () => {
+        let isFull = true;
         board.forEach(row => {
             row.forEach(
                 cell => {
-                    if (cell.getValue() === 0) return false;
+                    if (cell.getValue() === 0){
+                        isFull = false;
+                    };
                 }
             );    
         });
-        return true;
+        return isFull;
 
     }
 
@@ -125,22 +128,28 @@ const gameControler = (function (
     const thereIsAWinner = () => {
         let winnerToken = checkThreeInARow(Gameboard.getBoard());
         if (winnerToken != 0){
-            players.forEach(player => {
-                if (player.token == winnerToken) return player.name;
-            });
+            for (p of players){
+                if (p.token == winnerToken) return true;
+            }
         }
         return false;
     };
 
-    const playRound = function (row, col){
-        console.log(`Is ${getActivePlayer().name} turn..`)
-        Gameboard.setToken(row, col, getActivePlayer().token)
+    const isTheGameOver = () => {
         if (thereIsAWinner()){
             return "there is a winner";
         }
 
         if (Gameboard.theBoardIsFull()){
             return "the board is full";
+        }
+    };
+
+    const playRound = function (row, col){
+        console.log(`Is ${getActivePlayer().name} turn..`)
+        Gameboard.setToken(row, col, getActivePlayer().token)
+        if (isTheGameOver()){
+            return true;
         }
 
         togglePlayerTurn()
@@ -153,6 +162,7 @@ const gameControler = (function (
     return {
         playRound,
         getActivePlayer,
+        isTheGameOver
     }
 
 })();
@@ -187,7 +197,9 @@ const displayController = (function (){
 
 
     // Display the winner name in the turn section and generate a button that resets the Gameboard (create that closure in the Gameboard IFFE) and displays the game
-    const resetGame = (winner = false) => {
+    const displayResetGame = (winner = false) => {
+        if (winner) turnDiv.textContent = `${gameControler.getActivePlayer().name} is the winner`;
+        if (!winner) turnDiv.textContent = `The board is full`;
 
     };
 
@@ -199,12 +211,12 @@ const displayController = (function (){
         let [row, col] = target.id.split("-");
 
         // verify if there is a winner
-        let isTheGameOver = gameControler.playRound(row, col);
-        if (isTheGameOver){
-            if (isTheGameOver === "there is a winner") return resetGame(true);
-            if (isTheGameOver === "the board is full") return resetGame();
-        }
+        gameControler.playRound(row, col);
         displayGame();
+        if (gameControler.isTheGameOver()){
+            if (gameControler.isTheGameOver() === "there is a winner") return displayResetGame(true);
+            if (gameControler.isTheGameOver() === "the board is full") return displayResetGame();
+        }
     }
 
     return {
