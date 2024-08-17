@@ -136,8 +136,13 @@ const gameControler = (function (
         console.log(`Is ${getActivePlayer().name} turn..`)
         Gameboard.setToken(row, col, getActivePlayer().token)
         if (thereIsAWinner()){
-            return true;
+            return "there is a winner";
         }
+
+        if (Gameboard.theBoardIsFull()){
+            return "the board is full";
+        }
+
         togglePlayerTurn()
         printRound()    
         return false;
@@ -182,7 +187,7 @@ const displayController = (function (){
 
 
     // Display the winner name in the turn section and generate a button that resets the Gameboard (create that closure in the Gameboard IFFE) and displays the game
-    const displayWinner = () => {
+    const resetGame = (winner = false) => {
 
     };
 
@@ -194,8 +199,10 @@ const displayController = (function (){
         let [row, col] = target.id.split("-");
 
         // verify if there is a winner
-        if (gameControler.playRound(row, col)){
-            displayWinner(true);
+        let isTheGameOver = gameControler.playRound(row, col);
+        if (isTheGameOver){
+            if (isTheGameOver === "there is a winner") return resetGame(true);
+            if (isTheGameOver === "the board is full") return resetGame();
         }
         displayGame();
     }
