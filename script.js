@@ -104,6 +104,19 @@ const gameControler = (function (
         console.log("Player" + getActivePlayer().name + "turn");
     }
 
+    const setThreeInARowPositions = (startRow, startCol, rowIncrement, colIncrement) => {
+        let positions = {
+            startRow, 
+            startCol, 
+            rowIncrement, 
+            colIncrement
+        }
+
+        const getThreeInARowPositions = () => positions;
+
+        return { getThreeInARowPositions };
+    };
+
     const checkThreeInARow = (board) => {
         let rowsAndCols = board.length;
 
@@ -119,6 +132,7 @@ const gameControler = (function (
 
                 if (board[newRow][newCol].getValue() !== playerToken) return false;
             }
+            setThreeInARowPositions (startRow, startCol, rowIncrement, colIncrement);
             return true;
         }
 
@@ -226,12 +240,20 @@ const displayController = (function (){
         turnDiv.appendChild(resetBtn);
     };
 
+    const styleRowWinner = () => {
+
+    };
+
 
     const handleClick = (event) => {
         let target = event.target;
         if (target.className !== "grid-square") return;
 
         let [row, col] = target.id.split("-");
+
+        if (target.textContent){
+            return;
+        }
 
         // verify if there is a winner
         gameControler.playRound(row, col);
