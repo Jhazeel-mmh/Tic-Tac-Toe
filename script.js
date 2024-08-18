@@ -205,7 +205,7 @@ const displayController = (function (){
         gameGrid.textContent = "";
         Gameboard.getBoard().forEach((row, indexRow) => {
             row.forEach((cell, index) => {
-               let square = document.createElement("div");
+               let square = document.createElement("button");
                square.classList.add(`grid-square`);
                square.id = `${indexRow}-${index}`;  
 
