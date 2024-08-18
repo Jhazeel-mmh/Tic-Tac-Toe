@@ -103,19 +103,21 @@ const gameControler = (function (
         Gameboard.printBoard()
         console.log("Player" + getActivePlayer().name + "turn");
     }
+    
+    let coordenades = [];
 
     const setThreeInARowPositions = (startRow, startCol, rowIncrement, colIncrement) => {
-        let positions = {
-            startRow, 
-            startCol, 
-            rowIncrement, 
-            colIncrement
+        coordenades = [];
+        coordenades.push([startRow, startCol]);
+
+        for (let i = 1; i < 3; i++){
+            let newRow = startRow + i * rowIncrement;
+            let newCol = startCol + i * colIncrement;
+            coordenades.push([newRow, newCol]);
         }
-
-        const getThreeInARowPositions = () => positions;
-
-        return { getThreeInARowPositions };
     };
+
+    const getThreeInARowPositions = () => coordenades;
 
     const checkThreeInARow = (board) => {
         let rowsAndCols = board.length;
@@ -132,7 +134,7 @@ const gameControler = (function (
 
                 if (board[newRow][newCol].getValue() !== playerToken) return false;
             }
-            setThreeInARowPositions (startRow, startCol, rowIncrement, colIncrement);
+            setThreeInARowPositions(startRow, startCol, rowIncrement, colIncrement);
             return true;
         }
 
@@ -189,7 +191,8 @@ const gameControler = (function (
         playRound,
         getActivePlayer,
         isTheGameOver,
-        resetActivePlayer
+        resetActivePlayer,
+        getThreeInARowPositions,
     }
 
 })();
@@ -241,7 +244,8 @@ const displayController = (function (){
     };
 
     const styleRowWinner = () => {
-
+        let coordenades = gameControler.getThreeInARowPositions();
+        gameGrid
     };
 
 
