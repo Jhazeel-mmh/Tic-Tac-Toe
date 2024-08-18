@@ -14,6 +14,7 @@
     --fw-tinny: 200;
     --fs-300: 1rem;
     --fs-700: 2.5rem;
+    --fs-800: 3rem;
 }
 
 
@@ -70,6 +71,14 @@ svg {
     justify-content: center;
     align-items: center;
     border: 2px #000 solid;
+    font-size: var(--fs-700);
+    font-weight: var(--fw-bold);
+    transition: font-size ease 2s, color ease 2s;
+}
+
+.grid-square-winner {
+    color: var(--clr-primary-500);
+    font-size: calc(var(--fs-700) * 1.5);
 }
 
 .turn {

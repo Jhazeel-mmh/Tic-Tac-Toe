@@ -108,12 +108,12 @@ const gameControler = (function (
 
     const setThreeInARowPositions = (startRow, startCol, rowIncrement, colIncrement) => {
         coordenades = [];
-        coordenades.push([startRow, startCol]);
+        coordenades.push(`${startRow}-${startCol}`);
 
         for (let i = 1; i < 3; i++){
             let newRow = startRow + i * rowIncrement;
             let newCol = startCol + i * colIncrement;
-            coordenades.push([newRow, newCol]);
+            coordenades.push(`${newRow}-${newCol}`);
         }
     };
 
@@ -245,7 +245,12 @@ const displayController = (function (){
 
     const styleRowWinner = () => {
         let coordenades = gameControler.getThreeInARowPositions();
-        gameGrid
+        let gridSquares = document.querySelectorAll(".grid-square");
+        gridSquares.forEach(square => {
+            if (coordenades.includes(square.id)){
+                square.classList.add("grid-square-winner");
+            };
+        });
     };
 
 
