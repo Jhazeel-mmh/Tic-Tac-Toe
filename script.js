@@ -9,9 +9,18 @@ const Gameboard = (function (){
         }
     }
 
-    getBoard = () => board;
+    const getBoard = () => board;
 
-    theBoardIsFull = () => {
+    const createNewBoard = () => {
+        for (let i = 0; i < rowsAndCols; i++){
+            board[i] = []
+            for (let j = 0; j < rowsAndCols; j++){
+                board[i].push(Cell());
+            }
+        }
+    }
+
+    const theBoardIsFull = () => {
         let isFull = true;
         board.forEach(row => {
             row.forEach(
@@ -26,7 +35,7 @@ const Gameboard = (function (){
 
     }
 
-    setToken = (row, column, token) => {
+    const setToken = (row, column, token) => {
         if (row >= 3 || column >= 3) return;
 
         if (board[row][column].getValue() === 0){
@@ -36,7 +45,7 @@ const Gameboard = (function (){
         }
     }
 
-    printBoard = () => {
+    const printBoard = () => {
         let boardNew = board.map(row => row.map(cell => cell.getValue()));
         console.log(boardNew);
     }
@@ -46,7 +55,8 @@ const Gameboard = (function (){
         setToken,
         getBoard,
         printBoard,
-        theBoardIsFull
+        theBoardIsFull,
+        createNewBoard
     }
 })();
 
@@ -86,6 +96,8 @@ const gameControler = (function (
     }
 
     const getActivePlayer = () => activePlayer;
+
+    const resetActivePlayer = () => activePlayer = players[0];
 
     const printRound = () => {
         Gameboard.printBoard()
@@ -162,7 +174,8 @@ const gameControler = (function (
     return {
         playRound,
         getActivePlayer,
-        isTheGameOver
+        isTheGameOver,
+        resetActivePlayer
     }
 
 })();
@@ -195,17 +208,22 @@ const displayController = (function (){
         displayGrid();
     };
 
+    const resetGame = () => {
+        gameControler.resetActivePlayer();
+        Gameboard.createNewBoard();
+        displayController.displayGame();
+    };
 
     // Display the winner name in the turn section and generate a button that resets the Gameboard (create that closure in the Gameboard IFFE) and displays the game
     const displayResetGame = (winner = false) => {
         if (winner) turnDiv.textContent = `${gameControler.getActivePlayer().name} is the winner`;
         if (!winner) turnDiv.textContent = `The board is full`;
         let resetBtn = document.createElement("button");
+        resetBtn.id = "resetBtn";
         resetBtn.type = "button";
         resetBtn.textContent = "Reset Game";
-        turnDiv.appendChild(resetBtn);
         resetBtn.addEventListener("click", resetGame);
-
+        turnDiv.appendChild(resetBtn);
     };
 
 
