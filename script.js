@@ -200,6 +200,11 @@ const displayController = (function (){
     const displayResetGame = (winner = false) => {
         if (winner) turnDiv.textContent = `${gameControler.getActivePlayer().name} is the winner`;
         if (!winner) turnDiv.textContent = `The board is full`;
+        let resetBtn = document.createElement("button");
+        resetBtn.type = "button";
+        resetBtn.textContent = "Reset Game";
+        turnDiv.appendChild(resetBtn);
+        resetBtn.addEventListener("click", resetGame);
 
     };
 
