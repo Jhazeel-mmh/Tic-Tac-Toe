@@ -248,18 +248,21 @@ const displayController = (function (){
     const handleClick = (event) => {
         let target = event.target;
         if (target.className !== "grid-square") return;
+        if (target.textContent) return;
+        if (gameControler.isTheGameOver()) return;
 
         let [row, col] = target.id.split("-");
 
-        if (target.textContent){
-            return;
-        }
+        
 
         // verify if there is a winner
         gameControler.playRound(row, col);
         displayGame();
         if (gameControler.isTheGameOver()){
-            if (gameControler.isTheGameOver() === "there is a winner") return displayResetGame(true);
+            if (gameControler.isTheGameOver() === "there is a winner"){
+                styleRowWinner();
+                return displayResetGame(true)
+            };
             if (gameControler.isTheGameOver() === "the board is full") return displayResetGame();
         }
     }
