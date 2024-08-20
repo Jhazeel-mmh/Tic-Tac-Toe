@@ -48,6 +48,7 @@ a:hover {
 #resetBtn, input[type=submit]{
     background-color: var(--clr-primary-400);
     padding: 1rem;
+    border-radius: 0.5rem;
 }
 
 .game {

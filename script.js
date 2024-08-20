@@ -82,17 +82,30 @@ const gameControler = (function (){
     const players = [
         {
             name : playerOne,
-            token : "X"
+            token : "X",
+            score: 0
         },
         {
             name : playerTwo,
-            token : "O"
+            token : "O",
+            score: 0
         }
     ]
 
     const setPlayersName = (player1, player2) => {
         players[0].name = player1;
         players[1].name = player2;
+    };
+
+    const getPlayersData = () =>  players;
+
+    const addScoreToPlayerbyName = (name) => {
+        for(player of players){
+            if (player.name == name){
+                player.score++;
+            }
+        }
+
     };
 
     let activePlayer = players[0];
@@ -163,7 +176,9 @@ const gameControler = (function (){
         let winnerToken = checkThreeInARow(Gameboard.getBoard());
         if (winnerToken != 0){
             for (p of players){
-                if (p.token == winnerToken) return true;
+                if (p.token == winnerToken){ 
+                    return true
+                }
             }
         }
         return false;
@@ -185,7 +200,6 @@ const gameControler = (function (){
         if (isTheGameOver()){
             return true;
         }
-
         togglePlayerTurn()
         printRound()    
         return false;
@@ -199,7 +213,9 @@ const gameControler = (function (){
         isTheGameOver,
         resetActivePlayer,
         getThreeInARowPositions,
-        setPlayersName
+        setPlayersName,
+        getPlayersData,
+        addScoreToPlayerbyName
     }
 
 })();
@@ -207,6 +223,37 @@ const gameControler = (function (){
 const displayController = (function (){
     let gameGrid = document.querySelector(".game-grid");
     let turnDiv = document.querySelector(".turn");
+
+    let sideOnePlayer = document.querySelector(".player-left");
+    let sideTwoPlayer = document.querySelector(".player-right");
+
+    const displayDataOfPlayers = () => {
+        let playersData = gameControler.getPlayersData(); 
+        sideOnePlayer.textContent = "";
+        sideTwoPlayer.textContent = "";
+
+        let playerOneName = document.createElement("p");
+        let playerOneScore = document.createElement("p");
+        playerOneName.classList.add("player-name");
+        playerOneScore.classList.add("player-score");
+
+        let playerTwoName = document.createElement("p");
+        let playerTwoScore = document.createElement("p");
+        playerTwoName.classList.add("player-name");
+        playerTwoScore.classList.add("player-score");
+
+        playerOneName.textContent = playersData[0].name;
+        playerOneScore.textContent = "Score: " + playersData[0].score;
+        sideOnePlayer.appendChild(playerOneName);
+        sideOnePlayer.appendChild(playerOneScore);
+
+        playerTwoName.textContent = playersData[1].name;
+        playerTwoScore.textContent = "Score: " + playersData[1].score;
+        sideTwoPlayer.appendChild(playerTwoName);
+        sideTwoPlayer.appendChild(playerTwoScore)
+
+
+    };
 
     const displayGrid = () => {
         gameGrid.textContent = "";
@@ -230,6 +277,7 @@ const displayController = (function (){
     const displayGame = () => {
         turnDiv.textContent = `${gameControler.getActivePlayer().name} is your turn...`;
         displayGrid();
+        displayDataOfPlayers();
     };
 
     const resetGame = () => {
@@ -269,13 +317,14 @@ const displayController = (function (){
 
         let [row, col] = target.id.split("-");
 
-        
 
         // verify if there is a winner
         gameControler.playRound(row, col);
         displayGame();
         if (gameControler.isTheGameOver()){
             if (gameControler.isTheGameOver() === "there is a winner"){
+                gameControler.addScoreToPlayerbyName(gameControler.getActivePlayer().name);
+                displayDataOfPlayers();
                 styleRowWinner();
                 return displayResetGame(true)
             };
