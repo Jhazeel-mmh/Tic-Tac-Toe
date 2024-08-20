@@ -74,9 +74,10 @@ function Cell(){
     }
 }
 
-const gameControler = (function (
-    playerOne = "player1",
-    playerTwo = "player 2"){
+const gameControler = (function (){
+
+    let playerOne = "player1";
+    let playerTwo = "player 2";
 
     const players = [
         {
@@ -88,6 +89,11 @@ const gameControler = (function (
             token : "O"
         }
     ]
+
+    const setPlayersName = (player1, player2) => {
+        players[0].name = player1;
+        players[1].name = player2;
+    };
 
     let activePlayer = players[0];
 
@@ -193,6 +199,7 @@ const gameControler = (function (
         isTheGameOver,
         resetActivePlayer,
         getThreeInARowPositions,
+        setPlayersName
     }
 
 })();
@@ -281,5 +288,18 @@ const displayController = (function (){
     }
 })(); 
 
-displayController.displayGame();
+
+let formNames = document.getElementById("form-names");
+formNames.addEventListener("submit", (event) => {
+    event.preventDefault();
+    let formTarget = event.target;
+    let playerOneName = document.querySelector("#player-one").value;
+    let playerTwoName = document.querySelector("#player-two").value;
+    gameControler.setPlayersName(playerOneName, playerTwoName);
+    formTarget.style.display = "none";
+    displayController.displayGame();
+
+});
+
+
 document.querySelector(".game-grid").addEventListener("click", displayController.handleClick );

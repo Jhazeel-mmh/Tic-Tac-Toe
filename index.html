@@ -13,19 +13,19 @@
         <h1 class="game-title">Tic Tac Toe</h1>
         <form id="form-names">
             <p class="form-item">
-                <label for="playerOneName">
+                <label for="player-one">
                     Player 1 Name: 
                 </label>
-                <input type="text" name="playerOneName" placeholder="Gustavo" required minlength="5">
+                <input type="text" name="playerOneName" placeholder="Gustavo (X)" required minlength="5" id="player-one">
             </p>
             <p class="form-item">
-                <label for="playerTwoName">
+                <label for="player-two">
                     Player 2 Name: 
                 </label>
-                <input type="text" name="playerTwoName" placeholder="Grifindor" required minlength="5">
+                <input type="text" name="playerTwoName" placeholder="Grifindor (O)" required minlength="5" id="player-two">
             </p>
             <p class="form-item"> 
-                <input type="submit" value="Start">
+                <input type="submit" value="Start" id="startGame">
             </p>
         </form>
         <div class="player-left">
